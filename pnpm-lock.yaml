@@ -6,7 +6,11 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    dependencies:
+      '@dentvega/miniapp-storage':
+        specifier: workspace:*
+        version: link:packages/miniapp-storage
 
   packages/miniapp-contract:
     dependencies:
