@@ -12,6 +12,7 @@ export { s3Compatible, contentType, signedFetchFor, type S3CompatConfig } from "
 export { r2Storage, r2ConfigFromEnv, type R2Config } from "./r2";
 export { s3Storage, s3ConfigFromEnv, type S3Config } from "./s3";
 export { gcsStorage, gcsConfigFromEnv, type GcsConfig } from "./gcs";
+export { azureStorage, azureConfigFromEnv, type AzureConfig } from "./azure";
 export { fsStorage } from "./fs";
 export { mockStorage } from "./mock";
 export {

@@ -1,6 +1,6 @@
 {
   "name": "@dentvega/miniapp-storage",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Multi-cloud chunk storage for Re.Pack miniapp platforms: R2, S3, GCS, Azure, Vercel Blob, fs.",
   "license": "MIT",
   "type": "module",

@@ -1,6 +1,7 @@
 import { r2ConfigFromEnv } from "./r2";
 import { s3ConfigFromEnv } from "./s3";
 import { gcsConfigFromEnv } from "./gcs";
+import { azureConfigFromEnv } from "./azure";
 
 export type StorageProvider = "s3" | "r2" | "gcs" | "azure" | "blob" | "fs";
 
@@ -16,6 +17,7 @@ export function availableProviders(env: Record<string, string | undefined>): Sto
   if (s3ConfigFromEnv(env) !== null) out.push("s3");
   if (r2ConfigFromEnv(env) !== null) out.push("r2");
   if (gcsConfigFromEnv(env) !== null) out.push("gcs");
+  if (azureConfigFromEnv(env) !== null) out.push("azure");
   if (env.BLOB_READ_WRITE_TOKEN) out.push("blob");
   out.push("fs");
   return out;
