@@ -1,0 +1,31 @@
+{
+  "name": "@dentvega/miniapp-storage",
+  "version": "0.1.0",
+  "description": "Multi-cloud chunk storage for Re.Pack miniapp platforms: R2, S3, GCS, Azure, Vercel Blob, fs.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+    "./vercel-blob": { "types": "./dist/vercel-blob.d.ts", "default": "./dist/vercel-blob.js" }
+  },
+  "files": ["dist"],
+  "publishConfig": { "access": "public" },
+  "keywords": ["repack", "module-federation", "miniapp", "storage", "s3", "r2", "gcs", "azure"],
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "prepack": "pnpm build"
+  },
+  "dependencies": { "aws4fetch": "^1.0.20" },
+  "peerDependencies": { "@vercel/blob": "^2.0.0" },
+  "peerDependenciesMeta": { "@vercel/blob": { "optional": true } },
+  "devDependencies": {
+    "@vercel/blob": "^2.6.1",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.0"
+  }
+}
