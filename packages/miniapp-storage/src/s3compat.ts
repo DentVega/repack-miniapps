@@ -1,5 +1,5 @@
 import { AwsClient } from "aws4fetch";
-import { StorageError, type ChunkStorage, type SignedFetch } from "./types";
+import { StorageError, type ChunkStorage, type SignedFetch } from "./types.js";
 
 export interface S3CompatConfig {
   /** URL base del bucket, ya resuelta (sin barra final). */

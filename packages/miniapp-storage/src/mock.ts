@@ -1,4 +1,4 @@
-import type { ChunkStorage, PutCall } from "./types";
+import type { ChunkStorage, PutCall } from "./types.js";
 
 /** Storage en memoria para tests: registra uploads y deletes, baseUrl determinística. */
 export function mockStorage(): ChunkStorage & { puts: PutCall[]; deletes: string[] } {

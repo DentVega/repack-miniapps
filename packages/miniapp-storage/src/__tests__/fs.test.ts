@@ -2,8 +2,8 @@ import { afterEach, describe, expect, it } from "vitest";
 import { mkdtempSync, rmSync, readFileSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { fsStorage } from "../fs";
-import { StorageError } from "../types";
+import { fsStorage } from "../fs.js";
+import { StorageError } from "../types.js";
 
 const dirs: string[] = [];
 function tmp(): string {

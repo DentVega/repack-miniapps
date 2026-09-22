@@ -1,7 +1,7 @@
-import { r2ConfigFromEnv } from "./r2";
-import { s3ConfigFromEnv } from "./s3";
-import { gcsConfigFromEnv } from "./gcs";
-import { azureConfigFromEnv } from "./azure";
+import { r2ConfigFromEnv } from "./r2.js";
+import { s3ConfigFromEnv } from "./s3.js";
+import { gcsConfigFromEnv } from "./gcs.js";
+import { azureConfigFromEnv } from "./azure.js";
 
 export type StorageProvider = "s3" | "r2" | "gcs" | "azure" | "blob" | "fs";
 

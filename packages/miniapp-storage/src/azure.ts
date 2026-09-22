@@ -1,5 +1,5 @@
-import { contentType } from "./s3compat";
-import { StorageError, type ChunkStorage, type PlainFetch } from "./types";
+import { contentType } from "./s3compat.js";
+import { StorageError, type ChunkStorage, type PlainFetch } from "./types.js";
 
 export interface AzureConfig {
   readonly account: string;

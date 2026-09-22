@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { s3Compatible } from "../s3compat";
-import { StorageError } from "../types";
-import type { FetchInit, SignedFetch } from "../types";
+import { s3Compatible } from "../s3compat.js";
+import { StorageError } from "../types.js";
+import type { FetchInit, SignedFetch } from "../types.js";
 
 const config = {
   endpoint: "https://acct123.r2.cloudflarestorage.com/chunks",

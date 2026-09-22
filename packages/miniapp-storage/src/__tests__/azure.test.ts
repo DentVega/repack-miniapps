@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { azureStorage, azureConfigFromEnv } from "../azure";
-import { availableProviders } from "../provider";
-import { StorageError } from "../types";
-import type { FetchInit, PlainFetch } from "../types";
+import { azureStorage, azureConfigFromEnv } from "../azure.js";
+import { availableProviders } from "../provider.js";
+import { StorageError } from "../types.js";
+import type { FetchInit, PlainFetch } from "../types.js";
 
 const config = {
   account: "myaccount",

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { availableProviders, selectStorage, isStorageProvider } from "../provider";
+import { availableProviders, selectStorage, isStorageProvider } from "../provider.js";
 
 const r2Env = {
   R2_ACCOUNT_ID: "a",

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { StorageError } from "../types";
+import { StorageError } from "../types.js";
 
 describe("StorageError", () => {
   it("lleva code STORAGE_ERROR y el mensaje", () => {

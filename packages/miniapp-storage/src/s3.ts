@@ -1,5 +1,5 @@
-import { s3Compatible } from "./s3compat";
-import type { ChunkStorage, SignedFetch } from "./types";
+import { s3Compatible } from "./s3compat.js";
+import type { ChunkStorage, SignedFetch } from "./types.js";
 
 export interface S3Config {
   readonly bucket: string;

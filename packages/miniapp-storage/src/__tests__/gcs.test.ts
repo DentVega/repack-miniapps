@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { gcsStorage, gcsConfigFromEnv } from "../gcs";
-import { availableProviders } from "../provider";
-import type { FetchInit, SignedFetch } from "../types";
+import { gcsStorage, gcsConfigFromEnv } from "../gcs.js";
+import { availableProviders } from "../provider.js";
+import type { FetchInit, SignedFetch } from "../types.js";
 
 const env = {
   GCS_BUCKET: "my-bucket",

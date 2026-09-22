@@ -1,4 +1,4 @@
-import { StorageError, type ChunkStorage } from "./types";
+import { StorageError, type ChunkStorage } from "./types.js";
 
 /** Las tres funciones de @vercel/blob que usamos. Inyectables para testear sin el package. */
 export interface BlobDeps {

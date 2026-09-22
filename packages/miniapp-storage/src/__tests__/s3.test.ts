@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { s3Storage, s3ConfigFromEnv } from "../s3";
-import { availableProviders } from "../provider";
-import type { FetchInit, SignedFetch } from "../types";
+import { s3Storage, s3ConfigFromEnv } from "../s3.js";
+import { availableProviders } from "../provider.js";
+import type { FetchInit, SignedFetch } from "../types.js";
 
 describe("s3ConfigFromEnv", () => {
   it("null si falta alguna var", () => {

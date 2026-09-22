@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { blobStorage } from "../vercel-blob";
-import { StorageError } from "../types";
+import { blobStorage } from "../vercel-blob.js";
+import { StorageError } from "../types.js";
 
 function fakeDeps() {
   const puts: { path: string; opts: Record<string, unknown> }[] = [];

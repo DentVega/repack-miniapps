@@ -1,6 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { StorageError, type ChunkStorage } from "./types";
+import { StorageError, type ChunkStorage } from "./types.js";
 
 /**
  * Storage en disco, para desarrollo. NO sirve en serverless (el fs es efímero).

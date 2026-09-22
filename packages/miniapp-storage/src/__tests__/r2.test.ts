@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { r2Storage, r2ConfigFromEnv } from "../r2";
-import type { FetchInit, SignedFetch } from "../types";
+import { r2Storage, r2ConfigFromEnv } from "../r2.js";
+import type { FetchInit, SignedFetch } from "../types.js";
 
 const config = {
   accountId: "acct123",
