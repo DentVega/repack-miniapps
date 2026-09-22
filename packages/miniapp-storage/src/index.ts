@@ -10,6 +10,7 @@ export type {
 export { StorageError } from "./types";
 export { s3Compatible, contentType, signedFetchFor, type S3CompatConfig } from "./s3compat";
 export { r2Storage, r2ConfigFromEnv, type R2Config } from "./r2";
+export { s3Storage, s3ConfigFromEnv, type S3Config } from "./s3";
 export { fsStorage } from "./fs";
 export { mockStorage } from "./mock";
 export {
