@@ -37,6 +37,14 @@ export type { ChunkLoader, EntryComponent } from "./ChunkLoader.js";
 export type { UseMiniappDeps, UseMiniappResult } from "./useMiniapp.js";
 export { useMiniapp } from "./useMiniapp.js";
 
+export type {
+  MiniappHostProps,
+  MiniappHostRender,
+  MiniappLoadingProps,
+  MiniappErrorProps,
+} from "./MiniappHost.js";
+export { MiniappHost, DEFAULT_FALLBACK_MESSAGES } from "./MiniappHost.js";
+
 // --- Capability grant helper (host owns the scoped, revocable grant) ---
 import type { Capability, CapabilityGrant } from "@dentvega/miniapp-contract";
 
