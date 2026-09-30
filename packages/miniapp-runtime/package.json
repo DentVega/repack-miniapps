@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "description": "Host-side runtime for Re.Pack miniapp platforms: resolve → verify (integrity + Ed25519 signature) → mount → fallback. Headless; bring your own ChunkLoader and UI.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DentVega/repack-miniapps.git",
+    "directory": "packages/miniapp-runtime"
+  },
+  "homepage": "https://github.com/DentVega/repack-miniapps/tree/main/packages/miniapp-runtime#readme",
+  "bugs": {
+    "url": "https://github.com/DentVega/repack-miniapps/issues"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

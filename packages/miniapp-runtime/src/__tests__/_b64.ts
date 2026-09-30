@@ -1,5 +1,5 @@
 /** Encoder base64url puro (solo para tests; el prod solo decodifica). Evita Buffer,
- *  que no está tipado en el tsconfig del host-runtime (RN, sin @types/node). */
+ *  que no está tipado en el tsconfig de este paquete (RN, sin @types/node). */
 const A = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
 export function bytesToB64url(bytes: Uint8Array): string {

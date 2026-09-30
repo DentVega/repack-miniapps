@@ -1,7 +1,7 @@
 /**
  * Telemetría de runtime que el host reporta a Backstage (POST /api/metrics).
- * El shape coincide con `lib/metrics/types.ts` de backstage-web. Se define acá
- * (local a host-runtime) para no republicar @dentvega/miniapp-contract.
+ * Se define acá, local a este paquete, para no tener que republicar
+ * @dentvega/miniapp-contract por un único tipo de telemetría.
  */
 export type MetricEvent =
   | { readonly type: "mount"; readonly id: string; readonly version?: string }

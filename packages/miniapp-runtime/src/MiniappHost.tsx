@@ -21,7 +21,13 @@ export interface MiniappErrorProps {
   onRetry: () => void;
 }
 
-/** Componentes de UI que inyecta el host. Sin ellos se usan primitivas RN sin estilo propio. */
+/**
+ * Componentes de UI que inyecta el host. Sin ellos se usan primitivas RN sin estilo propio.
+ *
+ * `loading`/`error` deben ser referencias estables (definidas a nivel de módulo, o memoizadas
+ * con `useMemo`/`useCallback` si se arman inline) — una función/objeto literal nuevo en cada
+ * render de tu componente padre hace que React desmonte y remonte el loading/error en cada render.
+ */
 export interface MiniappHostRender {
   loading?: ComponentType<MiniappLoadingProps>;
   error?: ComponentType<MiniappErrorProps>;

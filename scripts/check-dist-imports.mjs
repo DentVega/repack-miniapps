@@ -1,18 +1,22 @@
 #!/usr/bin/env node
-// Falla si un dist/*.js tiene imports relativos sin extensión o que apuntan a archivos
-// inexistentes. Es el bug de la fase 3: tsc compila, los tests pasan, y el ESM publicado
-// revienta al importarlo.
+// Falla si un dist/*.js o dist/*.d.ts tiene imports/exports relativos sin extensión, o que
+// apuntan a archivos inexistentes: ese es justo el escenario en el que tsc compila, los tests
+// pasan, y el ESM publicado revienta al importarlo.
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 
-const RELATIVE = /(?:from\s+|import\s*\(\s*|export\s+\*\s+from\s+)["'](\.{1,2}\/[^"']+)["']/g;
+// from\s+       → `import X from "./y"`, `export { X } from "./y"`, `export * from "./y"`,
+//                 `export type { X } from "./y"` (all share the `from "..."` tail).
+// import\s*\(\s*→ dynamic `import("./y")`.
+// import\s+["']→ bare side-effect import, `import "./y";` (no `from`, no bound identifier).
+const RELATIVE = /(?:from\s+|import\s*\(\s*|import\s+)["'](\.{1,2}\/[^"']+)["']/g;
 const problems = [];
 
 function walk(dir) {
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
     if (statSync(p).isDirectory()) walk(p);
-    else if (p.endsWith(".js")) check(p);
+    else if (p.endsWith(".js") || p.endsWith(".d.ts")) check(p);
   }
 }
 

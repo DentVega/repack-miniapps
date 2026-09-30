@@ -61,7 +61,12 @@ const skewed = manifest([{name: 'react-native', requiredRange: '^0.99.0', single
 
 function renderHost(
   client: ResolveClient,
-  opts: {loader?: ChunkLoader; metrics?: MetricsClient; render?: MiniappHostRender} = {},
+  opts: {
+    loader?: ChunkLoader;
+    metrics?: MetricsClient;
+    render?: MiniappHostRender;
+    hostContractVersion?: string;
+  } = {},
 ) {
   render(
     <MiniappHost
@@ -73,9 +78,20 @@ function renderHost(
       metrics={opts.metrics}
       retry={{backoffMs: 0}}
       render={opts.render}
+      hostContractVersion={opts.hostContractVersion}
     />,
   );
 }
+
+let warnSpy: jest.SpyInstance;
+beforeEach(() => {
+  // useMiniapp logs console.warn on every load failure; the tests below exercise
+  // several failure paths on purpose, so keep the test output pristine.
+  warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+});
+afterEach(() => {
+  warnSpy.mockRestore();
+});
 
 describe('MiniappHost (headless, sin render)', () => {
   it('monta el Entry remoto con las capabilities', async () => {
@@ -141,5 +157,53 @@ describe('MiniappHost (render inyectado)', () => {
       render: {loading: ({retrying}) => <Text>cargando {String(retrying)}</Text>},
     });
     expect(screen.getByText('cargando false')).toBeOnTheScreen();
+  });
+});
+
+describe('MiniappHost (cobertura a nivel de hook)', () => {
+  it('el chunk loader que tira → download-failed', async () => {
+    const failingLoader: ChunkLoader = {
+      load: async () => {
+        throw new Error('boom');
+      },
+    };
+    renderHost(mockResolve(resolvedWith(manifest(compatibleShared))), {loader: failingLoader});
+    expect(await screen.findByText('We could not download this miniapp.')).toBeOnTheScreen();
+  });
+
+  it('manifiesto inválido a través del hook → invalid-manifest', async () => {
+    renderHost(mockResolve(resolvedWith({nope: true})));
+    expect(await screen.findByText('This miniapp has an invalid manifest.')).toBeOnTheScreen();
+  });
+
+  it('reporta un mount a métricas en el happy path', async () => {
+    const events: MetricEvent[] = [];
+    renderHost(mockResolve(resolvedWith(manifest(compatibleShared))), {
+      metrics: {track: e => events.push(e)},
+    });
+    await screen.findByText(/mounted: accounts:read/);
+    expect(events).toContainEqual({type: 'mount', id: ID, version: '0.1.0'});
+  });
+
+  it('auto-retry: resuelve tras 1 falla transitoria, sin fallback', async () => {
+    renderHost(flakyResolve(1, resolvedWith(manifest(compatibleShared))));
+    expect(await screen.findByText(/mounted: accounts:read/)).toBeOnTheScreen();
+    expect(screen.queryByText('Miniapp unavailable')).toBeNull();
+  });
+
+  it('falla retryable persistente → fallback CON botón Retry', async () => {
+    renderHost(mockResolve(new Error('resolve failed: down')));
+    expect(await screen.findByText('We could not locate this miniapp.')).toBeOnTheScreen();
+    expect(screen.getByRole('button', {name: 'Retry'})).toBeOnTheScreen();
+  });
+
+  it('host-too-old: hostContractVersion por debajo de minHostContract → fallback SIN botón Retry', async () => {
+    const tooOld = {
+      ...manifest(compatibleShared),
+      minHostContract: {reactNative: '0.76.0', contractVersion: '0.2.0'},
+    };
+    renderHost(mockResolve(resolvedWith(tooOld)), {hostContractVersion: '0.1.0'});
+    expect(await screen.findByText('Update the app to use this miniapp.')).toBeOnTheScreen();
+    expect(screen.queryByRole('button', {name: 'Retry'})).toBeNull();
   });
 });

@@ -2,7 +2,7 @@ import type { ResolveResponse } from "@dentvega/miniapp-contract";
 import { sha256Hex } from "./sha256.js";
 
 /**
- * Chunk integrity verification (ADR-008). `sha256Verifier` is the real check;
+ * Chunk integrity verification. `sha256Verifier` is the real check;
  * `noopVerifier` remains for tests/opt-out. Swap the impl, not the call site.
  */
 export interface IntegrityVerifier {
