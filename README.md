@@ -10,6 +10,7 @@ integrity and signature verification.
 | --- | --- |
 | [`@dentvega/miniapp-contract`](packages/miniapp-contract) | Shared types between the mobile host and the registry: manifest, resolve shape, capabilities, version-skew logic. |
 | [`@dentvega/miniapp-storage`](packages/miniapp-storage) | Multi-cloud chunk storage behind one interface: Cloudflare R2, AWS S3, Google Cloud Storage, Azure Blob, Vercel Blob, and local fs. |
+| [`@dentvega/miniapp-runtime`](packages/miniapp-runtime) | Host-side React Native runtime: resolve → verify (integrity + Ed25519 signature) → mount → fallback. Headless; bring your own `ChunkLoader` and UI. |
 
 ## Install
 

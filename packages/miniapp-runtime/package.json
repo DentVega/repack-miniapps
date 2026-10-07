@@ -1,0 +1,51 @@
+{
+  "name": "@dentvega/miniapp-runtime",
+  "version": "0.1.0",
+  "description": "Host-side runtime for Re.Pack miniapp platforms: resolve → verify (integrity + Ed25519 signature) → mount → fallback. Headless; bring your own ChunkLoader and UI.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DentVega/repack-miniapps.git",
+    "directory": "packages/miniapp-runtime"
+  },
+  "homepage": "https://github.com/DentVega/repack-miniapps/tree/main/packages/miniapp-runtime#readme",
+  "bugs": {
+    "url": "https://github.com/DentVega/repack-miniapps/issues"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" }
+  },
+  "files": ["dist"],
+  "publishConfig": { "access": "public" },
+  "keywords": ["repack", "module-federation", "react-native", "miniapp", "microfrontends"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "prepack": "pnpm build"
+  },
+  "dependencies": {
+    "@dentvega/miniapp-contract": "workspace:^",
+    "@noble/curves": "^2.3.0"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-native": ">=0.76"
+  },
+  "devDependencies": {
+    "@react-native/babel-preset": "0.76.6",
+    "@testing-library/react-native": "^13.2.0",
+    "@types/jest": "^29.5.14",
+    "@types/react": "^18.3.12",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "react": "18.3.1",
+    "react-native": "0.76.6",
+    "react-test-renderer": "18.3.1",
+    "typescript": "^5.6.3"
+  }
+}
