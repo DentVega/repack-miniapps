@@ -1,8 +1,17 @@
 {
   "name": "@dentvega/miniapp-contract",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Shared contract between the mobile host and the Backstage registry: manifest, resolve shape, capabilities, and version-skew logic.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DentVega/repack-miniapps.git",
+    "directory": "packages/miniapp-contract"
+  },
+  "homepage": "https://github.com/DentVega/repack-miniapps/tree/main/packages/miniapp-contract#readme",
+  "bugs": {
+    "url": "https://github.com/DentVega/repack-miniapps/issues"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
