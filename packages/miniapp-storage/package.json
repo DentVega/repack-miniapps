@@ -1,8 +1,15 @@
 {
   "name": "@dentvega/miniapp-storage",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Multi-cloud chunk storage for Re.Pack miniapp platforms: R2, S3, GCS, Azure, Vercel Blob, fs.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DentVega/repack-miniapps.git",
+    "directory": "packages/miniapp-storage"
+  },
+  "homepage": "https://github.com/DentVega/repack-miniapps/tree/main/packages/miniapp-storage#readme",
+  "bugs": { "url": "https://github.com/DentVega/repack-miniapps/issues" },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
