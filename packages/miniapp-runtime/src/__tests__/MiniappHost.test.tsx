@@ -8,7 +8,8 @@ import type {
   ResolveResponse,
   SemVer,
 } from '@dentvega/miniapp-contract';
-import {MiniappHost, type MiniappHostRender} from '../MiniappHost.js';
+import {MiniappHost, DEFAULT_FALLBACK_MESSAGES, type MiniappHostRender} from '../MiniappHost.js';
+import {ResolveFallbackError} from '../ResolveFallbackError.js';
 import type {ResolveClient} from '../ResolveClient.js';
 import type {MetricsClient, MetricEvent} from '../MetricsClient.js';
 import type {ChunkLoader, EntryComponent} from '../ChunkLoader.js';
@@ -205,5 +206,21 @@ describe('MiniappHost (cobertura a nivel de hook)', () => {
     renderHost(mockResolve(resolvedWith(tooOld)), {hostContractVersion: '0.1.0'});
     expect(await screen.findByText('Update the app to use this miniapp.')).toBeOnTheScreen();
     expect(screen.queryByRole('button', {name: 'Retry'})).toBeNull();
+  });
+
+  it('ResolveFallbackError("disabled") → fallback con ese motivo, sin Retry ni reintento', async () => {
+    let calls = 0;
+    const client: ResolveClient = {
+      resolve: async () => {
+        calls++;
+        throw new ResolveFallbackError('disabled', 'killed');
+      },
+    };
+    const events: MetricEvent[] = [];
+    renderHost(client, {metrics: {track: e => events.push(e)}});
+    expect(await screen.findByText(DEFAULT_FALLBACK_MESSAGES.disabled)).toBeOnTheScreen();
+    expect(screen.queryByRole('button', {name: 'Retry'})).toBeNull();
+    expect(calls).toBe(1);
+    expect(events).toContainEqual({type: 'fallback', id: ID, reason: 'disabled'});
   });
 });

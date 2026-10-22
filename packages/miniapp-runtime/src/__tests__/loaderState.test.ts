@@ -16,3 +16,10 @@ describe("isRetryable — razones de firma", () => {
     expect([a, b]).toHaveLength(2);
   });
 });
+
+describe("isRetryable — motivos de la torre", () => {
+  it("disabled y no-compatible-version NO son retryables", () => {
+    expect(isRetryable("disabled")).toBe(false);
+    expect(isRetryable("no-compatible-version")).toBe(false);
+  });
+});

@@ -23,6 +23,14 @@ export { b64urlToBytes } from "./base64url.js";
 
 export type { ResolveClient } from "./ResolveClient.js";
 export { httpResolveClient } from "./ResolveClient.js";
+export { ResolveFallbackError } from "./ResolveFallbackError.js";
+export type { ManifestStore } from "./manifestStore.js";
+export { memoryManifestStore } from "./manifestStore.js";
+export type { ControlManifestClient } from "./controlManifestClient.js";
+export { controlManifestClient } from "./controlManifestClient.js";
+export type { FlagsClient, FlagsResult } from "./FlagsClient.js";
+export { FLAGS_FALLBACK, httpFlagsClient } from "./FlagsClient.js";
+export { manifestResolveClient } from "./manifestResolveClient.js";
 export { cachingResolveClient } from "./cachingResolveClient.js";
 export type { MetricsClient, MetricEvent } from "./MetricsClient.js";
 export { httpMetricsClient, noopMetricsClient } from "./MetricsClient.js";

@@ -65,6 +65,8 @@ export const DEFAULT_FALLBACK_MESSAGES: Record<FallbackReason, string> = {
   "host-too-old": "Update the app to use this miniapp.",
   "invalid-signature": "We could not verify the signature of this miniapp.",
   "unknown-key": "This miniapp is not authorized to run.",
+  disabled: "This miniapp is temporarily unavailable.",
+  "no-compatible-version": "There is no version of this miniapp compatible with this version of the app. Update the app to use it.",
 };
 
 function DefaultLoading({ retrying }: MiniappLoadingProps): React.JSX.Element {
