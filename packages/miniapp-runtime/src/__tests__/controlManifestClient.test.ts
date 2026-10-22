@@ -3,7 +3,7 @@ import { controlManifestMessage, type ControlManifestBody } from "@dentvega/mini
 import { controlManifestClient } from "../controlManifestClient.js";
 import { memoryManifestStore } from "../manifestStore.js";
 import { ResolveFallbackError } from "../ResolveFallbackError.js";
-import type { TrustBundleClient } from "../trustBundle.js";
+import { httpTrustBundleClient, canonicalBundleMessage, type TrustBundleClient } from "../trustBundle.js";
 import { bytesToB64url } from "./_b64.js";
 
 const secret = ed25519.utils.randomSecretKey();
@@ -161,5 +161,29 @@ describe("controlManifestClient", () => {
     } finally {
       jest.useRealTimers();
     }
+  });
+
+  it("enforce offline con bundle y manifiesto guardados válidos: resuelve", async () => {
+    const root = ed25519.utils.randomSecretKey();
+    const tb = { version: 1, updatedAt: "2026-10-01T00:00:00.000Z", keys: { _manifest: pub } };
+    const signedTb = {
+      bundle: tb,
+      signature: bytesToB64url(ed25519.sign(new TextEncoder().encode(canonicalBundleMessage(tb)), root)),
+    };
+    const tbStore = memoryManifestStore();
+    await tbStore.save(JSON.stringify(signedTb));
+    const manifestStore = memoryManifestStore();
+    await manifestStore.save(sign(body(7, FUTURE)));
+    const client = controlManifestClient({
+      baseUrl: "http://x",
+      trustBundle: httpTrustBundleClient("http://x", bytesToB64url(ed25519.getPublicKey(root)), failFetch, {
+        store: tbStore,
+      }),
+      store: manifestStore,
+      mode: "enforce",
+      now: () => NOW,
+      fetchImpl: failFetch,
+    });
+    expect((await client.current()).seq).toBe(7);
   });
 });

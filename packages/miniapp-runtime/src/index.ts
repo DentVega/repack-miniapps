@@ -16,7 +16,12 @@ export type { SignatureVerifier, SignatureResult } from "./signature.js";
 export { signatureVerifier } from "./signature.js";
 export type { SignatureMode, SignatureGateOutcome } from "./signatureGate.js";
 export { signatureGate } from "./signatureGate.js";
-export type { TrustBundleClient, SignedTrustBundle, TrustBundleBody } from "./trustBundle.js";
+export type {
+  TrustBundleClient,
+  SignedTrustBundle,
+  TrustBundleBody,
+  HttpTrustBundleOptions,
+} from "./trustBundle.js";
 export { httpTrustBundleClient, canonicalBundleMessage } from "./trustBundle.js";
 export { signatureMessage } from "./signatureMessage.js";
 export { b64urlToBytes } from "./base64url.js";
