@@ -31,13 +31,16 @@ export function controlManifestClient(opts: {
   now?: () => number;
   fetchImpl?: typeof fetch;
   clockSkewMs?: number;
+  /** Tope del GET antes de caer al guardado. Default 2000. */
+  timeoutMs?: number;
 }): ControlManifestClient {
   const now = opts.now ?? (() => Date.now());
   const fetchImpl = opts.fetchImpl ?? fetch;
   const skewMs = opts.clockSkewMs ?? 300_000;
+  const timeoutMs = opts.timeoutMs ?? 2000;
 
-  /** Firma + expiración. La forma ya se comprobó. */
-  async function verify(m: SignedControlManifest): Promise<boolean> {
+  /** Solo la firma, según las reglas de claves del modo. La forma ya se comprobó. */
+  async function signatureOk(m: SignedControlManifest): Promise<boolean> {
     const keys = await opts.trustBundle.keys();
     const pub = keys?.[MANIFEST_KEY];
     if (pub === undefined) {
@@ -55,6 +58,12 @@ export function controlManifestClient(opts: {
         return false;
       }
     }
+    return true;
+  }
+
+  /** Firma + expiración. */
+  async function verify(m: SignedControlManifest): Promise<boolean> {
+    if (!(await signatureOk(m))) return false;
     const expires = Date.parse(m.body.expiresAt);
     return Number.isFinite(expires) && expires + skewMs >= now();
   }
@@ -72,13 +81,29 @@ export function controlManifestClient(opts: {
   return {
     async current() {
       const stored = parseStored(await opts.store.load().catch(() => null));
+      // Piso anti-replay: solo cuenta el guardado con firma válida (aunque esté expirado).
+      const floor = stored !== null && (await signatureOk(stored)) ? stored.body.seq : -Infinity;
+      const controller = typeof AbortController === "undefined" ? null : new AbortController();
+      let timer: ReturnType<typeof setTimeout> | undefined;
       try {
-        const res = await fetchImpl(`${opts.baseUrl.replace(/\/+$/, "")}/api/control-manifest`);
-        if (res.ok) {
-          const fetched: unknown = await res.json();
+        const timeout = new Promise<null>((resolve) => {
+          timer = setTimeout(() => {
+            controller?.abort();
+            resolve(null);
+          }, timeoutMs);
+        });
+        const request = (async () => {
+          const res = await fetchImpl(`${opts.baseUrl.replace(/\/+$/, "")}/api/control-manifest`, {
+            signal: controller?.signal,
+          });
+          return res.ok ? ((await res.json()) as unknown) : null;
+        })();
+        request.catch(() => undefined); // evita rechazo sin manejar si gana el timeout
+        const fetched = await Promise.race([request, timeout]);
+        {
           if (
             isSignedControlManifest(fetched) &&
-            (stored === null || fetched.body.seq >= stored.body.seq) &&
+            fetched.body.seq >= floor &&
             (await verify(fetched))
           ) {
             await opts.store.save(JSON.stringify(fetched)).catch(() => undefined);
@@ -87,6 +112,8 @@ export function controlManifestClient(opts: {
         }
       } catch {
         // sin red / JSON inválido: cae al guardado
+      } finally {
+        if (timer !== undefined) clearTimeout(timer);
       }
       if (stored !== null && (await verify(stored))) return stored.body;
       throw new ResolveFallbackError("resolve-failed", "control manifest unavailable");

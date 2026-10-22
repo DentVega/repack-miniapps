@@ -134,4 +134,32 @@ describe("controlManifestClient", () => {
     const { client } = make({ raw, keys: {}, mode: "enforce" });
     await expect(client.current()).rejects.toMatchObject({ reason: "resolve-failed" });
   });
+
+  it("un guardado con firma ajena y seq enorme no bloquea un manifiesto legítimo", async () => {
+    const stored = sign(body(1e15, FUTURE), ed25519.utils.randomSecretKey());
+    const raw = sign(body(10, FUTURE));
+    const { client, store } = make({ raw, stored });
+    expect((await client.current()).seq).toBe(10);
+    expect(JSON.parse((await store.load())!).body.seq).toBe(10);
+  });
+
+  it("un guardado genuino pero expirado sigue fijando el piso anti-replay", async () => {
+    const stored = sign(body(20, NOW - 400_000));
+    const old = sign(body(10, FUTURE));
+    const { client } = make({ raw: old, stored });
+    await expect(client.current()).rejects.toMatchObject({ reason: "resolve-failed" });
+  });
+
+  it("si el GET nunca responde, a los 2000 ms usa el guardado válido", async () => {
+    jest.useFakeTimers();
+    try {
+      const stored = sign(body(5, FUTURE));
+      const { client } = make({ fetchImpl: (() => new Promise(() => {})) as unknown as typeof fetch, stored });
+      const p = client.current();
+      await jest.advanceTimersByTimeAsync(2000);
+      expect((await p).seq).toBe(5);
+    } finally {
+      jest.useRealTimers();
+    }
+  });
 });
