@@ -51,4 +51,26 @@ describe("httpFlagsClient", () => {
     await jest.advanceTimersByTimeAsync(1);
     expect(await p).toEqual(FLAGS_FALLBACK);
   });
+
+  it("con platform=ios, incluye el parámetro en la URL", async () => {
+    const urls: string[] = [];
+    const fetchImpl = (async (u: string) => {
+      urls.push(u);
+      return { ok: true, status: 200, json: async () => ({ available: false, channel: "candidate" }) };
+    }) as unknown as typeof fetch;
+    const c = httpFlagsClient("http://x", { fetchImpl, platform: "ios" });
+    expect(await c.evaluate("lab_saludo", "user-001")).toEqual({ available: false, channel: "candidate" });
+    expect(urls[0]).toBe("http://x/api/flags?id=lab_saludo&subject=user-001&platform=ios");
+  });
+
+  it("con platform=android, incluye el parámetro en la URL", async () => {
+    const urls: string[] = [];
+    const fetchImpl = (async (u: string) => {
+      urls.push(u);
+      return { ok: true, status: 200, json: async () => ({ available: true, channel: "stable" }) };
+    }) as unknown as typeof fetch;
+    const c = httpFlagsClient("http://x", { fetchImpl, platform: "android" });
+    expect(await c.evaluate("lab_saludo", "user-001")).toEqual({ available: true, channel: "stable" });
+    expect(urls[0]).toBe("http://x/api/flags?id=lab_saludo&subject=user-001&platform=android");
+  });
 });

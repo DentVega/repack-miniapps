@@ -23,7 +23,7 @@ function isFlagsResult(v: unknown): v is FlagsResult {
 /** Cliente HTTP de `GET /api/flags`. Nunca lanza: ante error, 5xx, cuerpo inválido o timeout devuelve FLAGS_FALLBACK. */
 export function httpFlagsClient(
   baseUrl: string,
-  opts: { timeoutMs?: number; fetchImpl?: typeof fetch } = {},
+  opts: { timeoutMs?: number; fetchImpl?: typeof fetch; platform?: "android" | "ios" } = {},
 ): FlagsClient {
   const timeoutMs = opts.timeoutMs ?? 2000;
   const fetchImpl = opts.fetchImpl ?? fetch;
@@ -32,6 +32,7 @@ export function httpFlagsClient(
       // Query armada a mano: la URL de React Native no implementa URLSearchParams.set.
       const params = [`id=${encodeURIComponent(id)}`];
       if (subject !== null) params.push(`subject=${encodeURIComponent(subject)}`);
+      if (opts.platform !== undefined) params.push(`platform=${encodeURIComponent(opts.platform)}`);
       const url = `${baseUrl.replace(/\/+$/, "")}/api/flags?${params.join("&")}`;
 
       let timer: ReturnType<typeof setTimeout> | undefined;
