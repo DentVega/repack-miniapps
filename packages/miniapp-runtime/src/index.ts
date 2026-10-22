@@ -16,13 +16,26 @@ export type { SignatureVerifier, SignatureResult } from "./signature.js";
 export { signatureVerifier } from "./signature.js";
 export type { SignatureMode, SignatureGateOutcome } from "./signatureGate.js";
 export { signatureGate } from "./signatureGate.js";
-export type { TrustBundleClient, SignedTrustBundle, TrustBundleBody } from "./trustBundle.js";
+export type {
+  TrustBundleClient,
+  SignedTrustBundle,
+  TrustBundleBody,
+  HttpTrustBundleOptions,
+} from "./trustBundle.js";
 export { httpTrustBundleClient, canonicalBundleMessage } from "./trustBundle.js";
 export { signatureMessage } from "./signatureMessage.js";
 export { b64urlToBytes } from "./base64url.js";
 
 export type { ResolveClient } from "./ResolveClient.js";
 export { httpResolveClient } from "./ResolveClient.js";
+export { ResolveFallbackError } from "./ResolveFallbackError.js";
+export type { ManifestStore } from "./manifestStore.js";
+export { memoryManifestStore } from "./manifestStore.js";
+export type { ControlManifestClient } from "./controlManifestClient.js";
+export { controlManifestClient } from "./controlManifestClient.js";
+export type { FlagsClient, FlagsResult } from "./FlagsClient.js";
+export { FLAGS_FALLBACK, httpFlagsClient } from "./FlagsClient.js";
+export { manifestResolveClient } from "./manifestResolveClient.js";
 export { cachingResolveClient } from "./cachingResolveClient.js";
 export type { MetricsClient, MetricEvent } from "./MetricsClient.js";
 export { httpMetricsClient, noopMetricsClient } from "./MetricsClient.js";

@@ -8,7 +8,9 @@ export type FallbackReason =
   | "integrity-failed"
   | "host-too-old"
   | "invalid-signature"
-  | "unknown-key";
+  | "unknown-key"
+  | "disabled"
+  | "no-compatible-version";
 
 const RETRYABLE_REASONS: ReadonlySet<FallbackReason> = new Set([
   "resolve-failed",

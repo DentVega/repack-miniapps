@@ -10,6 +10,7 @@ import {
 } from "./loaderState.js";
 import { evaluateManifest, type HostProvided } from "./evaluate.js";
 import type { ResolveClient } from "./ResolveClient.js";
+import { ResolveFallbackError } from "./ResolveFallbackError.js";
 import type { MetricsClient } from "./MetricsClient.js";
 import type { ChunkLoader, EntryComponent } from "./ChunkLoader.js";
 import { noopVerifier, type IntegrityVerifier } from "./integrity.js";
@@ -115,10 +116,13 @@ export function useMiniapp(deps: UseMiniappDeps): UseMiniappResult {
           const detail = err instanceof Error ? err.message : "unknown error";
           // Surface the failure so miniapp load errors are diagnosable in the field.
           console.warn("[miniapp] load failed:", detail);
-          failure = {
-            reason: detail.startsWith("resolve failed") ? "resolve-failed" : "download-failed",
-            detail,
-          };
+          failure =
+            err instanceof ResolveFallbackError
+              ? { reason: err.reason, detail }
+              : {
+                  reason: detail.startsWith("resolve failed") ? "resolve-failed" : "download-failed",
+                  detail,
+                };
         }
         if (cancelled.current) return;
 
